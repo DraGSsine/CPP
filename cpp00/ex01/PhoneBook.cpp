@@ -26,32 +26,31 @@ void Contact::setindex(int index)
 }
 std::string Contact::getfirstName()
 {
-    return (this->firstName);
+    return (firstName);
 }
 std::string Contact::getlastName()
 {
-    return (this->lastName);
+    return (lastName);
 }
 std::string Contact::getnickname()
 {
-    return (this->nickname);
+    return (nickname);
 }
 std::string Contact::getnumber()
 {
-    return (this->number);
+    return (number);
 }
 std::string Contact::getdarkestSecret()
 {
-    return (this->darkestSecret);
+    return (darkestSecret);
 }
 int Contact::getindex()
 {
-    return (this->index);
+    return (index);
 }
-
 PhoneBook::PhoneBook()
 {
-    this->nextIndex = 0;
+    nextIndex = 0;
 }
 void PhoneBook::setNextIndex(int nextIndex)
 {
@@ -59,11 +58,10 @@ void PhoneBook::setNextIndex(int nextIndex)
         this->nextIndex = 0;
     else
         this->nextIndex = nextIndex;
-
 }
 int PhoneBook::getNextIndex()
 {
-    return (this->nextIndex);
+    return (nextIndex);
 }
 std::string truncate(std::string str)
 {
@@ -71,13 +69,13 @@ std::string truncate(std::string str)
         return (str.substr(0, 10 - 4) + "...");
     return (str);
 }
-void PhoneBook::addContact(std::string firstName, std::string lastName, std::string nickname, std::string number, std::string darkestSecret, Contact contacts[8])
+void PhoneBook::addContact(std::string firstName, std::string lastName, std::string nickname, std::string number, std::string darkestSecret)
 {
     int Index = 0;
 
     Index = PhoneBook::getNextIndex();
     PhoneBook::setNextIndex(Index + 1);
-
+    
     contacts[Index].setindex(Index);
     contacts[Index].setfirstName(firstName);
     contacts[Index].setlastName(lastName);
@@ -85,7 +83,7 @@ void PhoneBook::addContact(std::string firstName, std::string lastName, std::str
     contacts[Index].setnumber(number);
     contacts[Index].setdarkestSecret(darkestSecret);
 }
-void PhoneBook::displayAllContact(Contact contacts[8])
+void PhoneBook::displayAllContact()
 {
     std::cout << "---------------------------------------------------" << std::endl;
     std::cout << "| ";
@@ -100,18 +98,19 @@ void PhoneBook::displayAllContact(Contact contacts[8])
 
     for (int j = 0; j < 8; j++)
     {
-        if (contacts[j].getfirstName().empty())
-            continue;
-        std::cout << "| ";
-        std::cout << std::setw(10) << contacts[j].getindex() << " | ";
-        std::cout << std::setw(10) << truncate(contacts[j].getfirstName()) << " | ";
-        std::cout << std::setw(10) << truncate(contacts[j].getlastName()) << " | ";
-        std::cout << std::setw(10) << truncate(contacts[j].getnickname()) + "|" << std::endl;
-        std::cout << "---------------------------------------------------" << std::endl;
+        if (!contacts[j].getfirstName().empty())
+        {
+            std::cout << "| ";
+            std::cout << std::setw(10) << contacts[j].getindex() << " | ";
+            std::cout << std::setw(10) << truncate(contacts[j].getfirstName()) << " | ";
+            std::cout << std::setw(10) << truncate(contacts[j].getlastName()) << " | ";
+            std::cout << std::setw(10) << truncate(contacts[j].getnickname()) + "|" << std::endl;
+            std::cout << "---------------------------------------------------" << std::endl;
+        }
     }
     return;
 }
-void PhoneBook::displayOneContact(Contact contacts[8], int index)
+void PhoneBook::displayOneContact(int index)
 {
 
     if (contacts[index].getfirstName().empty())
@@ -125,18 +124,19 @@ void PhoneBook::displayOneContact(Contact contacts[8], int index)
     std::cout << "Number: " << contacts[index].getnumber() << std::endl;
     std::cout << "Darkest secret: " << contacts[index].getdarkestSecret() << std::endl;
 }
-int PhoneBook::displayContact(Contact contacts[8])
+
+int PhoneBook::displayContact()
 {
-    PhoneBook::displayAllContact(contacts);
+    PhoneBook::displayAllContact();
     std::string index;
     std::cout << "Index: ";
     std::getline(std::cin, index);
-    if (atoi(index.c_str()) < 0 || atoi(index.c_str()) > 7 || isdigit(atoi(index.c_str())) == -1)
+    if (index.empty() == true || index.find_first_not_of("01234567") != std::string::npos || std::stoi(index) < 0 || std::stoi(index) > 7 || std::stoi(index) == -1)
     {
         std::cout << "Error: Invalid index" << std::endl;
         return -1;
     }
-    PhoneBook::displayOneContact(contacts, atoi(index.c_str()));
+    PhoneBook::displayOneContact(std::stoi(index));
     return 0;
 }
 
@@ -145,7 +145,7 @@ int parse(std::string firstName, std::string lastName, std::string nickname, std
     if (firstName.empty() || lastName.empty() || nickname.empty() || number.empty() || darkestSecret.empty())
     {
         std::cout << "Error: All fields are required" << std::endl;
-        return 1;
+        return -1;
     }
     return 0;
 }
@@ -153,7 +153,6 @@ int parse(std::string firstName, std::string lastName, std::string nickname, std
 int main()
 {
     PhoneBook phoneBook;
-    Contact contacts[8];
     std::string command;
     std::string firstName;
     std::string lastName;
@@ -165,7 +164,7 @@ int main()
     while (std::cout << "Prompt-> " && std::getline(std::cin, command) && !std::cin.eof())
     {
         if (command == "EXIT" || command == "exit")
-            return(0);
+            return (0);
         if (command == "ADD" || command == "add")
         {
             std::cout << "First name: ";
@@ -180,15 +179,15 @@ int main()
             std::getline(std::cin, darkestSecret);
 
             error = parse(firstName, lastName, nickname, number, darkestSecret);
-            if (error == 1)
+            if (error == -1)
                 continue;
-            phoneBook.addContact(firstName, lastName, nickname, number, darkestSecret, contacts);
+            phoneBook.addContact(firstName, lastName, nickname, number, darkestSecret);
         }
         else if (command == "SEARCH" || command == "search")
         {
-            error = phoneBook.displayContact(contacts);
+            error = phoneBook.displayContact();
             if (error == -1)
-                return(1);
+                continue;
         }
     }
     return 0;

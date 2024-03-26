@@ -1,6 +1,5 @@
 #include "Account.hpp"
 #include <chrono>
-
 #include <iostream>
 
 void Account::_displayTimestamp(void)

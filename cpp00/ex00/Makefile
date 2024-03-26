@@ -1,14 +1,15 @@
-NAME=megaphone 
-SRC=megaphone.o
+NAME=MegaPhone 
+SRC=MegaPhone.o
 FLAGS= -Wall -Wextra -Werror -std=c++98
 CC=g++
+
 all: $(NAME)
 
 $(NAME): $(SRC)
-	$(CC) $(FLAGS) $^ -o $@
+	$(CC) $(FLAGS) $(SRC) -o $(NAME)
 
 %.o: %.cpp
-	$(CC) $(FLAGS) -c $< -o $@
+	$(CC) $(FLAGS)  -c $<
 
 clean:
 	rm -f $(SRC)

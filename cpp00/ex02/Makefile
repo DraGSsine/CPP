@@ -5,10 +5,10 @@ CC=g++
 all: $(NAME)
 
 $(NAME): $(SRC)
-	$(CC) $(FLAGS) $^ -o $@
+	$(CC) $(FLAGS) $(SRC) -o $(NAME)
 
 %.o: %.cpp Account.hpp
-	$(CC) $(FLAGS) -c $< -o $@
+	$(CC) $(FLAGS)  -c $<
 
 clean:
 	rm -f $(SRC)

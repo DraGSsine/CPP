@@ -1,6 +1,5 @@
 #ifndef PHONEBOOK_HPP
 #define PHONEBOOK_HPP
-
 #include <iostream>
 #include <iomanip>
 class Contact
@@ -31,12 +30,13 @@ class PhoneBook
 {
 private:
     int nextIndex;
+    Contact contacts[8];
 public:
     PhoneBook();
-    void addContact(std::string firstName, std::string lastName, std::string nickname, std::string number, std::string darkestSecret, Contact contacts[8]);
-    void displayAllContact(Contact contacts[8]);
-    void displayOneContact(Contact contacts[8], int index);
-    int  displayContact(Contact contacts[8]);
+    void addContact(std::string firstName, std::string lastName, std::string nickname, std::string number, std::string darkestSecret);
+    void displayAllContact();
+    void displayOneContact(int index);
+    int  displayContact();
     void setNextIndex(int nextIndex);
     int getNextIndex();
 };

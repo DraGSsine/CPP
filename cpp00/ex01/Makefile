@@ -2,13 +2,14 @@ NAME=PhoneBook
 SRC=PhoneBook.o
 FLAGS= -Wall -Wextra -Werror -std=c++98
 CC=g++
+
 all: $(NAME)
 
 $(NAME): $(SRC)
-	$(CC) $(FLAGS) $^ -o $@
+	$(CC) $(FLAGS) $(SRC) -o $(NAME)
 
 %.o: %.cpp PhoneBook.hpp
-	$(CC) $(FLAGS) -c $< -o $@
+	$(CC) $(FLAGS) -c $<
 
 clean:
 	rm -f $(SRC)
